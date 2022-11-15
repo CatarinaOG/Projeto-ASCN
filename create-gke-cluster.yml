@@ -1,6 +1,9 @@
 ---
 # Playbook to create GKE cluster
 
+# fornecido pela equipa docente e não deve ser alterado
+# No entanto, as variáveis que dizem respeito ao projeto e contas de serviço devem ser atualizadas. (feito em inventory/ acho)
+
 - name: Create a GKE cluster
   hosts: localhost
   gather_facts: false

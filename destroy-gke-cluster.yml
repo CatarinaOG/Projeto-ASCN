@@ -1,6 +1,9 @@
 ---
 # Playbook to destroy GKE cluster
 
+# fornecido pela equipa docente e não deve ser alterados
+# No entanto, as variáveis que dizem respeito ao projeto e contas de serviço devem ser atualizadas. (feito em inventory/ acho)
+
 - name: Destroy GKE cluster
   hosts: localhost
   gather_facts: false

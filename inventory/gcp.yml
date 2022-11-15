@@ -3,8 +3,8 @@ all:
  vars:
 
   # GKE cluster variables
-  gcp_project: ascn              # ID of GCP Project
-  gcp_auth_kind: serviceaccount            # Do not change
+  gcp_project: ascn                        # ID of GCP Project
+  gcp_auth_kind: serviceaccount            # Do not change, acho que está errado: service_account?
   gcp_cred_file: "gcp_keys/ascn-367014-9115b1a0b0b2.json"    # Path to service account keys (json file downloaded from GCP)
 
   gcp_zone: us-central1-a

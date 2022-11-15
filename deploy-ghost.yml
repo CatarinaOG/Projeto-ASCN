@@ -1,3 +1,15 @@
 ---
 # Playbook to deploy Ghost and its components
 # TO DO
+
+
+# - Este playbook pode ser corrido quer para uma instalação completamente nova do
+#Ghost, quer para uma instalação prévia para a qual a execução foi terminada mas cujos
+#dados persistentes não foram removidos.
+
+
+# Quando é efetuada uma instalação nova, o playbook tem de criar automaticamente um
+# administrador de Blog com os seguintes dados:
+# ■ Nome: ascn
+# ■ Palavra-passe: ascn123
+# ■ Email: ascn@example.com
