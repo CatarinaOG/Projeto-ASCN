@@ -13,3 +13,14 @@
 # ■ Nome: ascn
 # ■ Palavra-passe: ascn123
 # ■ Email: ascn@example.com
+
+- name: ghost deployment
+  hosts: localhost
+  gather_facts: true 
+  #The setup module fetches all the details from the remote hosts to our controller nodes and dumps them directly to our screen for the facts to be visible to users.
+  #The gather_facts module from the Ansible playbook runs the setup module by default at the start of each playbook to gather the facts about remote hosts.
+  #these facts can be used in playbooks
+  #https://www.redhat.com/sysadmin/playing-ansible-facts#:~:text=The%20gather_facts%20module%20from%20the,the%20facts%20about%20remote%20hosts.&text=Fetch%20the%20Ansible%20facts%20and%20display%20them%20using%20a%20playbook.&text=Fetching%20the%20Ansible%20facts%2C%20filtering,displaying%20them%20using%20a%20playbook.
+  roles:
+    - ghost_app_deploy
+    #- ghost_db_deploy
