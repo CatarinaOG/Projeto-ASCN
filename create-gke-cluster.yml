@@ -7,5 +7,7 @@
 - name: Create a GKE cluster
   hosts: localhost
   gather_facts: false
+  environment:   #cred for serviceaccount.json
+    GOOGLE_CREDENTIALS: "{{ gcp_cred_file }}"
   roles:
       - gke_cluster_create
