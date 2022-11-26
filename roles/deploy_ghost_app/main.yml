@@ -1,0 +1,5 @@
+- name: Create docker container
+  docker_container:
+    name: app_container
+    image: ghost:latest
+    state: started 

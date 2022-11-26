@@ -1,0 +1,9 @@
+- name:  database deployment 
+  kubernetes.core.k8s:
+    state: present
+    src: /k8s/mysql-deployment.yml
+
+- name: database service:
+  kubernetes.core.k8s:
+    state: present
+    src: /k8s/mysql-service.yml
