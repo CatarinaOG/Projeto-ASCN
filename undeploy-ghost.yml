@@ -1,6 +1,3 @@
 ---
 # Playbook to undeploy Ghost and its component
 # TO DO
-
-#Apenas quando for especificada a flag (-e delete_data=true) é que se deve proceder à
-#remoção completa de todos os dados persistentes da instalação.

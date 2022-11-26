@@ -1,14 +1,6 @@
 ---
 # Playbook to test the full deployment of Ghost (from creation to destruction)
 
-# código não deve ser alterado. No entanto, o playbook e role podem ser estendidos
-# para incluir testes adicionais (Tarefa 2 do enunciado).
-
-# Para a correta execução do playbook test-all.yml é obrigatório que, aquando a execução do
-# playbook deploy-ghost.yml, sejam atualizadas automaticamente as vars em inventory/gcp.yml:
-# - ghost_ip que corresponde ao endereço IP público da aplicação Ghost.
-# - ghost_port que corresponde ao porto público da aplicação.
-
 - import_playbook: deploy-ghost.yml
 
 - name: Tests
@@ -28,5 +20,3 @@
     - { role: test_ghost }
 
 - import_playbook: undeploy-ghost.yml delete_data='true'
-
-# codigo novo apenas em baixo
