@@ -1,0 +1,15 @@
+apiVersion: v1 
+kind: Service
+metadata:
+  name: ghost-service
+  namespace: ascn-cluster
+  labels:
+    app: ghost
+spec:
+  type: LoadBalancer    
+  selector:
+    app: ghost
+  ports:
+    - port: 2368
+      targetPort: 2368
+      nodePort: 30007

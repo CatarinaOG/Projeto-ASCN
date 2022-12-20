@@ -1,0 +1,22 @@
+- name: create k8s namespace
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1 
+      kind: Namespace
+      metadata:
+        name: ascn-cluster
+
+- name: app ghost service 
+  kubernetes.core.k8s:
+    state: present
+    src: ../k8s/ghost-service.yml
+
+
+- name: app ghost deployment
+  kubernetes.core.k8s:
+    state: present
+    src: ../k8s/ghost-deployment.yml
+
+
+  

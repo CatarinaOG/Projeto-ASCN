@@ -20,4 +20,5 @@ all:
 
 
   # Additional variables
-  # ...
+  app: ghost
+  app_image: ghost:latest
