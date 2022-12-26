@@ -12,10 +12,32 @@
     state: present
     src: ../k8s/mysql-service.yml
 
-
-
 - name:  database deployment 
   kubernetes.core.k8s:
     state: present
     src: ../k8s/mysql-deployment.yml
+  
+- name: create storage class 
+  kubernetes.core.k8s:
+    state: present
+    src: ../k8s/storage-class.yml
 
+- name: Mysql Persistent Volume Claim
+  kubernetes.core.k8s:
+    state: present
+    src: ../k8s/mysql-pvc.yml
+
+- name: get mysql pod name
+  shell: 'kubectl get pod -n ascn-cluster -l app=mysql -o jsonpath="{.items[0].metadata.name}"'
+  register: mysql_pod_name
+
+- name: debugging
+  debug:
+    var: mysql_pod_name
+
+
+- name: Create Admin
+  kubernetes.core.k8s_exec:
+    namespace: ascn-cluster
+    pod: "{{ mysql_pod_name.stdout_lines[0] }}"
+    command: mysql -u root -p ghost -e "update ghost.users set name='admin', password='\$2b\$10\$77l2HBPz7F9loLKiz/CynuIdjNpIq2jb9uioIw8/O4Sa7ZBhQTM2S', email='jpdelgado2001@gmail.com', status='active' where id=1;"

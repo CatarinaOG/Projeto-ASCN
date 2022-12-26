@@ -12,11 +12,33 @@
     state: present
     src: ../k8s/ghost-service.yml
 
-
 - name: app ghost deployment
   kubernetes.core.k8s:
     state: present
     src: ../k8s/ghost-deployment.yml
 
+#- shell: if [[ $(kubectl get services ghost-service -n ascn-cluster --output jsonpath='{.status.loadBalancer.ingress[0]}') ]]; then exit 0; else exit 1; fi;
+#  register: wait_for_ext_ip
+#  until: wait_for_ext_ip.rc == 0
+#  retries: 2
+#  delay: 5
 
-  
+- name: run kubectl to retreive external IP - Wait for task to complete
+  shell: "kubectl get -n ascn-cluster service ghost-service -o wide | awk '{ print $4}' |  grep -v EXT"
+  register: k_ext_ip
+  until: k_ext_ip.stdout != ""
+  retries: 2
+  delay: 5
+
+- name: debugging
+  debug:
+    var: k_ext_ip
+
+
+- name: Updating Inventory
+  lineinfile: 
+    dest: /Users/brunofilipemirandapereira/Documents/Universidade/Mestrado/1ANO/1-semestre/ASCN/TP/Projeto-ASCN/inventory/gcp.yml
+    regexp: 'ghost_ip:.*$'
+    line: '  ghost_ip: {{ k_ext_ip.stdout }}'
+    state: present
+    backrefs: yes
