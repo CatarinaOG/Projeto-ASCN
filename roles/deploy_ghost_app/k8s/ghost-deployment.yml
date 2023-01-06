@@ -30,6 +30,6 @@ spec:
         - name: database__connection__database
           value: ghost
         - name: url
-          value: http://ghost.org
+          value: 
         ports:
         - containerPort: 2368

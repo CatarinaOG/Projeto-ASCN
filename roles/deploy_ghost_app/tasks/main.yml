@@ -15,7 +15,43 @@
 - name: app ghost deployment
   kubernetes.core.k8s:
     state: present
-    src: ../k8s/ghost-deployment.yml
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: ghost-deployment
+        namespace: ascn-cluster
+        labels:
+          app: ghost
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: ghost
+        template:
+          metadata:
+            labels:
+              app: ghost
+          spec:
+            containers:
+            - name: ghost
+              image: ghost:latest
+              env:
+              - name: database__client
+                value: mysql
+              - name: database__connection__host
+                value: mysql-service
+              - name: database__connection__user
+                value: ghostuser
+              - name: database__connection__password
+                value: pass
+              - name: database__connection__database
+                value: ghost
+              - name: url
+                value: http://{{ ghost_ip }}:{{ ghost_port }}
+              ports:
+              - containerPort: 2368
+
 
 #- shell: if [[ $(kubectl get services ghost-service -n ascn-cluster --output jsonpath='{.status.loadBalancer.ingress[0]}') ]]; then exit 0; else exit 1; fi;
 #  register: wait_for_ext_ip
@@ -42,3 +78,22 @@
     line: '  ghost_ip: {{ k_ext_ip.stdout }}'
     state: present
     backrefs: yes
+
+- name: get mysql pod name
+  shell: 'kubectl get pod -n ascn-cluster -l app=mysql -o jsonpath="{.items[0].metadata.name}"'
+  register: mysql_pod_name
+
+- name: debugging
+  debug:
+    var: mysql_pod_name
+
+
+- name: Create Admin
+  kubernetes.core.k8s_exec:
+    namespace: ascn-cluster
+    pod: "{{ mysql_pod_name.stdout_lines[0] }}"
+    command: mysql -u root -p ghost -e "update ghost.users set name='admin', password='\$2b\$10\$77l2HBPz7F9loLKiz/CynuIdjNpIq2jb9uioIw8/O4Sa7ZBhQTM2S', email='jpdelgado2001@gmail.com', status='active' where id=1;"
+  retries: 2
+  delay: 10
+  register: result
+  until: result.rc == 0
