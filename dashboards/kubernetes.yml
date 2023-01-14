@@ -1,0 +1,212 @@
+displayName: Trabalho Kubernetes ASCN
+gridLayout:
+  columns: '2'
+  widgets:
+  - title: Média de utilização do PV pelo Ghost
+    xyChart:
+      chartOptions:
+        mode: COLOR
+      dataSets:
+      - minAlignmentPeriod: 60s
+        plotType: LINE
+        targetAxis: Y1
+        timeSeriesQuery:
+          timeSeriesFilter:
+            aggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_MEAN
+            filter: metric.type="kubernetes.io/pod/volume/used_bytes" resource.type="k8s_pod"
+              metadata.user_labels."app"="ghost"
+      timeshiftDuration: 0s
+      yAxis:
+        label: y1Axis
+        scale: LINEAR
+  - title: Média de utilização do PV pela BD
+    xyChart:
+      chartOptions:
+        mode: COLOR
+      dataSets:
+      - minAlignmentPeriod: 60s
+        plotType: LINE
+        targetAxis: Y1
+        timeSeriesQuery:
+          timeSeriesFilter:
+            aggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_MEAN
+            filter: metric.type="kubernetes.io/pod/volume/used_bytes" resource.type="k8s_pod"
+              metadata.user_labels."app"="mysql"
+      timeshiftDuration: 0s
+      yAxis:
+        label: y1Axis
+        scale: LINEAR
+  - title: Média de Bytes recebidos pela pod do Ghost
+    xyChart:
+      chartOptions:
+        mode: COLOR
+      dataSets:
+      - minAlignmentPeriod: 60s
+        plotType: LINE
+        targetAxis: Y1
+        timeSeriesQuery:
+          timeSeriesFilter:
+            aggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_RATE
+            filter: metric.type="kubernetes.io/pod/network/received_bytes_count" resource.type="k8s_pod"
+              metadata.user_labels."app"="ghost"
+            secondaryAggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_MEAN
+      timeshiftDuration: 0s
+      yAxis:
+        label: y1Axis
+        scale: LINEAR
+  - title: Média de Bytes recebidos pela pod do MySQL
+    xyChart:
+      chartOptions:
+        mode: COLOR
+      dataSets:
+      - minAlignmentPeriod: 60s
+        plotType: LINE
+        targetAxis: Y1
+        timeSeriesQuery:
+          timeSeriesFilter:
+            aggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_RATE
+            filter: metric.type="kubernetes.io/pod/network/received_bytes_count" resource.type="k8s_pod"
+              metadata.user_labels."app"="mysql"
+            secondaryAggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_MEAN
+      timeshiftDuration: 0s
+      yAxis:
+        label: y1Axis
+        scale: LINEAR
+  - title: Fração de uso do PV pelo MySQL
+    xyChart:
+      chartOptions:
+        mode: COLOR
+      dataSets:
+      - minAlignmentPeriod: 60s
+        plotType: LINE
+        targetAxis: Y1
+        timeSeriesQuery:
+          timeSeriesFilter:
+            aggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_MEAN
+            filter: metric.type="kubernetes.io/pod/volume/utilization" resource.type="k8s_pod"
+              metadata.user_labels."app"="mysql"
+      timeshiftDuration: 0s
+      yAxis:
+        label: y1Axis
+        scale: LINEAR
+  - title: Fração do uso do PV pelo Ghost
+    xyChart:
+      chartOptions:
+        mode: COLOR
+      dataSets:
+      - minAlignmentPeriod: 60s
+        plotType: LINE
+        targetAxis: Y1
+        timeSeriesQuery:
+          timeSeriesFilter:
+            aggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_MEAN
+            filter: metric.type="kubernetes.io/pod/volume/utilization" resource.type="k8s_pod"
+              metadata.user_labels."app"="ghost"
+      timeshiftDuration: 0s
+      yAxis:
+        label: y1Axis
+        scale: LINEAR
+  - title: Tempo de uso do CPU pelo container MySQL
+    xyChart:
+      chartOptions:
+        mode: COLOR
+      dataSets:
+      - minAlignmentPeriod: 60s
+        plotType: LINE
+        targetAxis: Y1
+        timeSeriesQuery:
+          timeSeriesFilter:
+            aggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_RATE
+            filter: metric.type="kubernetes.io/container/cpu/core_usage_time" resource.type="k8s_container"
+              metadata.user_labels."app"="mysql"
+            secondaryAggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_MEAN
+      timeshiftDuration: 0s
+      yAxis:
+        label: y1Axis
+        scale: LINEAR
+  - title: Tempo de uso do CPU pelo container Ghost
+    xyChart:
+      chartOptions:
+        mode: COLOR
+      dataSets:
+      - minAlignmentPeriod: 60s
+        plotType: LINE
+        targetAxis: Y1
+        timeSeriesQuery:
+          timeSeriesFilter:
+            aggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_RATE
+            filter: metric.type="kubernetes.io/container/cpu/core_usage_time" resource.type="k8s_container"
+              metadata.user_labels."app"="ghost"
+            secondaryAggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_MEAN
+      timeshiftDuration: 0s
+      yAxis:
+        label: y1Axis
+        scale: LINEAR
+  - title: Bytes transmitidos para o Pod MySQL
+    xyChart:
+      chartOptions:
+        mode: COLOR
+      dataSets:
+      - minAlignmentPeriod: 60s
+        plotType: LINE
+        targetAxis: Y1
+        timeSeriesQuery:
+          timeSeriesFilter:
+            aggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_RATE
+            filter: metric.type="kubernetes.io/pod/network/sent_bytes_count" resource.type="k8s_pod"
+              metadata.user_labels."app"="mysql"
+            secondaryAggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_MEAN
+      timeshiftDuration: 0s
+      yAxis:
+        label: y1Axis
+        scale: LINEAR
+  - title: Bytes transmitidos para o Pod Ghost
+    xyChart:
+      chartOptions:
+        mode: COLOR
+      dataSets:
+      - minAlignmentPeriod: 60s
+        plotType: LINE
+        targetAxis: Y1
+        timeSeriesQuery:
+          timeSeriesFilter:
+            aggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_RATE
+            filter: metric.type="kubernetes.io/pod/network/sent_bytes_count" resource.type="k8s_pod"
+              metadata.user_labels."app"="ghost"
+            secondaryAggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_MEAN
+      timeshiftDuration: 0s
+      yAxis:
+        label: y1Axis
+        scale: LINEAR

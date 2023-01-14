@@ -7,6 +7,8 @@
   environment:
     GOOGLE_CREDENTIALS: "{{ gcp_cred_file }}"
   roles:
-    - undeploy_ghost
+    - {role: undeploy_ghost}
+    - {role: delete_data, when: "delete_data is defined and delete_data == 'true'" }
+
 
 

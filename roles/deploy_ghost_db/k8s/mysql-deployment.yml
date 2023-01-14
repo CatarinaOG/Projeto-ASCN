@@ -21,7 +21,7 @@ spec:
         tier: database
     spec:
       volumes:
-      - name: ghost-pv
+      - name: mysql-pv
         persistentVolumeClaim:
           claimName: mysql-pv-claim
       containers:
@@ -40,4 +40,4 @@ spec:
         - containerPort: 3306
         volumeMounts:
           - mountPath: "/var/lib/mysql"
-            name: ghost-pv
+            name: mysql-pv

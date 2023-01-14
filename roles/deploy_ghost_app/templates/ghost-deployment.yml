@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghost-deployment
+  namespace: ascn-cluster
+  labels:
+    app: ghost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ghost
+  template:
+    metadata:
+      labels:
+        app: ghost
+    spec:
+      volumes:
+      - name: ghost-pv
+        persistentVolumeClaim:
+          claimName: ghost-pv-claim
+      containers:
+      - name: ghost
+        image: ghost:5.14.1
+        env:
+        - name: database__client
+          value: mysql
+        - name: database__connection__host
+          value: mysql-service
+        - name: database__connection__user
+          value: ghostuser
+        - name: database__connection__password
+          value: pass
+        - name: database__connection__database
+          value: ghost
+        - name: url
+          value: http://{{ ghost_ip }}:{{ ghost_port }}
+        - name: mail__from
+          value: "{{ mail_from }}"
+        - name: mail__transport
+          value: "{{ mail_transport }}"
+        - name: mail__options__host
+          value: "{{ mail_host }}"
+        - name: mail__options__service
+          value: "{{ mail_service }}"
+        - name: mail__options__port
+          value: "{{ mail_port }}"
+        - name: mail__options__secure
+          value: "{{ mail_secure }}"
+        - name: mail__options__auth__user
+          value: "{{ mail_auth_user }}"
+        - name: mail__options__auth__pass
+          value: "{{ mail_auth_pass }}"
+        
+        ports:
+        - containerPort: 2368
+        volumeMounts:
+          - mountPath: "/var/lib/ghost/content"
+            name: ghost-pv

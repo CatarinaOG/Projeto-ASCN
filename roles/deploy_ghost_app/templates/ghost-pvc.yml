@@ -1,0 +1,14 @@
+---
+# Persistent Volume Claim for Ghost pod
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ghost-pv-claim
+  namespace: ascn-cluster
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ghost-storage-class
+  resources:
+    requests:
+      storage: 20Gi

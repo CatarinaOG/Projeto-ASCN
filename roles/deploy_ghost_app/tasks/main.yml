@@ -7,57 +7,23 @@
       metadata:
         name: ascn-cluster
 
+
+- name: Mysql Persistent Volume Claim for Ghost
+  kubernetes.core.k8s:
+    state: present
+    template: ../templates/ghost-pvc.yml
+
 - name: app ghost service 
   kubernetes.core.k8s:
     state: present
-    src: ../k8s/ghost-service.yml
+    src: ../templates/ghost-service.yml
 
 - name: app ghost deployment
   kubernetes.core.k8s:
     state: present
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: ghost-deployment
-        namespace: ascn-cluster
-        labels:
-          app: ghost
-      spec:
-        replicas: 1
-        selector:
-          matchLabels:
-            app: ghost
-        template:
-          metadata:
-            labels:
-              app: ghost
-          spec:
-            containers:
-            - name: ghost
-              image: ghost:latest
-              env:
-              - name: database__client
-                value: mysql
-              - name: database__connection__host
-                value: mysql-service
-              - name: database__connection__user
-                value: ghostuser
-              - name: database__connection__password
-                value: pass
-              - name: database__connection__database
-                value: ghost
-              - name: url
-                value: http://{{ ghost_ip }}:{{ ghost_port }}
-              ports:
-              - containerPort: 2368
-
-
-#- shell: if [[ $(kubectl get services ghost-service -n ascn-cluster --output jsonpath='{.status.loadBalancer.ingress[0]}') ]]; then exit 0; else exit 1; fi;
-#  register: wait_for_ext_ip
-#  until: wait_for_ext_ip.rc == 0
-#  retries: 2
-#  delay: 5
+    namespace: ascn-cluster
+    template: ../templates/ghost-deployment.yml
+    
 
 - name: run kubectl to retreive external IP - Wait for task to complete
   shell: "kubectl get -n ascn-cluster service ghost-service -o wide | awk '{ print $4}' |  grep -v EXT"
@@ -65,11 +31,6 @@
   until: k_ext_ip.stdout != ""
   retries: 2
   delay: 5
-
-- name: debugging
-  debug:
-    var: k_ext_ip
-
 
 - name: Updating Inventory
   lineinfile: 
@@ -83,23 +44,9 @@
   shell: 'kubectl get pod -n ascn-cluster -l app=mysql -o jsonpath="{.items[0].metadata.name}"'
   register: mysql_pod_name
 
-- name: debugging
-  debug:
-    var: mysql_pod_name
-
 - name: get ghost pod name
   shell: 'kubectl get pod -n ascn-cluster -l app=ghost -o jsonpath="{.items[0].metadata.name}"'
   register: ghost_pod_name
-
-#- name: Create Admin
-#  kubernetes.core.k8s_exec:
-#    namespace: ascn-cluster
-#    pod: "{{ mysql_pod_name.stdout_lines[0] }}"
-#    command: mysql -u ghostuser -ppass -e "update ghost.users set name='admin', password='\$2b\$10\$77l2HBPz7F9loLKiz/CynuIdjNpIq2jb9uioIw8/O4Sa7ZBhQTM2S', email='jpdelgado2001@gmail.com', status='active' where id=1;"
-#  register: result
-#  until: result is succeeded
-#  retries: 3
-#  delay: 15
 
 
 - name: Create Admin
@@ -110,9 +57,9 @@
   delay: 40
 
 
-- name: Config Email service
-  command: kubectl cp /Users/brunofilipemirandapereira/Documents/Universidade/Mestrado/1ANO/1-semestre/ASCN/TP/Projeto-ASCN/inventory/config.production.json ascn-cluster/{{ ghost_pod_name.stdout_lines[0] }}:/var/lib/ghost/config.production.json
+#- name: Config Email service
+#  command: kubectl cp /Users/brunofilipemirandapereira/Documents/Universidade/Mestrado/1ANO/1-semestre/ASCN/TP/Projeto-ASCN/inventory/config.production.json ascn-cluster/{{ ghost_pod_name.stdout_lines[0] }}:/var/lib/ghost/config.production.json
+#
 
-
-- name: restart ghost 
-  command: kubectl exec {{ ghost_pod_name.stdout_lines[0] }} -n {{ mynamespace }} -- bash -c "cd /var/lib/ghost &&  ghost config"
+#- name: restart ghost 
+#  command: kubectl exec {{ ghost_pod_name.stdout_lines[0] }} -n {{ mynamespace }} -- bash -c "cd /var/lib/ghost &&  ghost config"

@@ -12,3 +12,21 @@
   until: result.status == 200
   retries: 3
   delay: 5
+
+- name: Login to the portal
+  uri:
+    url: "http://{{ ghost_ip }}:{{ ghost_port }}/ghost"
+    method: POST
+    body: "username=jpdelgado2001@gmail.com&password=123456"
+    status_code: 200
+    follow_redirects: true
+  register: login
+
+- name: Get cookie
+  ansible.builtin.uri:
+    url: "http://{{ ghost_ip }}:{{ ghost_port }}/ghost/api/admin/session/"
+    method: GET
+  register: result
+  until: result.status == 200
+  retries: 1
+  delay: 3

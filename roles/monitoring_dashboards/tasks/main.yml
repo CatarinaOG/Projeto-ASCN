@@ -1,0 +1,2 @@
+- name: create kubernetes monitoring dashboards
+  shell: gcloud monitoring dashboards create --config-from-file dashboards/kubernetes.yml

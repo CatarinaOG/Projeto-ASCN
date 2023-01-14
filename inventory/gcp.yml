@@ -5,7 +5,7 @@ all:
   # GKE cluster variables
   gcp_project: ascn-367014              # ID of GCP Project
   gcp_auth_kind: serviceaccount            # Do not change
-  gcp_cred_file: /Users/brunofilipemirandapereira/Documents/Universidade/Mestrado/1ANO/1-semestre/ASCN/TP/Code base/gcp_keys/ascn-367014-9115b1a0b0b2.json    # Path to service account keys (json file downloaded from GCP)
+  gcp_cred_file: gcp_keys/ascn-367014-9115b1a0b0b2.json    # Path to service account keys (json file downloaded from GCP)
 
   gcp_zone: us-central1-a
   gcp_image_type: ubuntu_containerd
@@ -15,7 +15,7 @@ all:
 
 
   # APP variables
-  ghost_ip: 34.133.132.84
+  ghost_ip: 34.69.197.17
   ghost_port: 2368        
 
 
@@ -31,4 +31,7 @@ all:
   mynamespace: ascn-cluster 
 
   #PVC
-  pvcname: mysql-pv-claim
+  mysql_pvcname: mysql-pv-claim
+  ghost_pvcname: ghost-pv-claim
+
+ 

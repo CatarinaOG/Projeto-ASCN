@@ -1,0 +1,16 @@
+---
+- name: Delete sql pvc
+  kubernetes.core.k8s:
+    api_version: v1
+    kind: PersistentVolumeClaim
+    name: "{{ mysql_pvcname }}"
+    namespace: "{{ mynamespace }}"
+    state: absent
+
+- name: Delete ghost pvc
+  kubernetes.core.k8s:
+    api_version: v1
+    kind: PersistentVolumeClaim
+    name: "{{ ghost_pvcname }}"
+    namespace: "{{ mynamespace }}"
+    state: absent
