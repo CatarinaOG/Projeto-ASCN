@@ -1,0 +1,15 @@
+- name: Delete deployment ghost
+  k8s:
+    api_version: apps/v1
+    kind: Deployment
+    name: "{{ deployment_ghost_name }}"
+    namespace: "{{ mynamespace }}"
+    state: absent
+
+- name: Delete deployment db
+  k8s:
+    api_version: apps/v1
+    kind: Deployment
+    name: "{{ deployment_db_name }}"
+    namespace: "{{ mynamespace }}"
+    state: absent

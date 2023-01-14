@@ -1,0 +1,29 @@
+{
+    "url": "http://localhost:2368",
+    "server": {
+      "port": 2368,
+      "host": "::"
+    },
+    "mail": {
+        "transport": "SMTP",
+        "options": {
+            "service" : "Mailgun",
+            "host": "smtp.mailgun.org",
+            "port" : 587,
+            "auth": {
+                "user": "postmaster@sandboxbc01fac9cdcd4a4ebeeae407d0a65e5c.mailgun.org",
+                "pass": "cf403e1c54a31e3801a33e831feab2e0-4c2b2223-a846c86d"
+            }
+        }
+    },
+    "logging": {
+      "transports": [
+        "file",
+        "stdout"
+      ]
+    },
+    "process": "systemd",
+    "paths": {
+      "contentPath": "/var/lib/ghost/content"
+    }
+  }

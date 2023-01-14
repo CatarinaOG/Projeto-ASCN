@@ -20,7 +20,7 @@ spec:
         app: mysql
         tier: database
     spec:
-      volumes: 
+      volumes:
       - name: ghost-pv
         persistentVolumeClaim:
           claimName: mysql-pv-claim
@@ -38,3 +38,6 @@ spec:
           value: pass # Use Secret object in real usage
         ports:
         - containerPort: 3306
+        volumeMounts:
+          - mountPath: "/var/lib/mysql"
+            name: ghost-pv

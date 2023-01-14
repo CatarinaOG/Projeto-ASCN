@@ -87,13 +87,32 @@
   debug:
     var: mysql_pod_name
 
+- name: get ghost pod name
+  shell: 'kubectl get pod -n ascn-cluster -l app=ghost -o jsonpath="{.items[0].metadata.name}"'
+  register: ghost_pod_name
+
+#- name: Create Admin
+#  kubernetes.core.k8s_exec:
+#    namespace: ascn-cluster
+#    pod: "{{ mysql_pod_name.stdout_lines[0] }}"
+#    command: mysql -u ghostuser -ppass -e "update ghost.users set name='admin', password='\$2b\$10\$77l2HBPz7F9loLKiz/CynuIdjNpIq2jb9uioIw8/O4Sa7ZBhQTM2S', email='jpdelgado2001@gmail.com', status='active' where id=1;"
+#  register: result
+#  until: result is succeeded
+#  retries: 3
+#  delay: 15
+
 
 - name: Create Admin
-  kubernetes.core.k8s_exec:
-    namespace: ascn-cluster
-    pod: "{{ mysql_pod_name.stdout_lines[0] }}"
-    command: mysql -u root -p ghost -e "update ghost.users set name='admin', password='\$2b\$10\$77l2HBPz7F9loLKiz/CynuIdjNpIq2jb9uioIw8/O4Sa7ZBhQTM2S', email='jpdelgado2001@gmail.com', status='active' where id=1;"
-  retries: 2
-  delay: 10
+  command: kubectl exec "{{ mysql_pod_name.stdout_lines[0] }}" -n "{{ mynamespace }}" -- mysql -u ghostuser -ppass -e "update ghost.users set name='admin', password='\$2b\$10\$77l2HBPz7F9loLKiz/CynuIdjNpIq2jb9uioIw8/O4Sa7ZBhQTM2S', email='jpdelgado2001@gmail.com', status='active' where id=1;"  
   register: result
-  until: result.rc == 0
+  until: result is succeeded
+  retries: 3
+  delay: 40
+
+
+- name: Config Email service
+  command: kubectl cp /Users/brunofilipemirandapereira/Documents/Universidade/Mestrado/1ANO/1-semestre/ASCN/TP/Projeto-ASCN/inventory/config.production.json ascn-cluster/{{ ghost_pod_name.stdout_lines[0] }}:/var/lib/ghost/config.production.json
+
+
+- name: restart ghost 
+  command: kubectl exec {{ ghost_pod_name.stdout_lines[0] }} -n {{ mynamespace }} -- bash -c "cd /var/lib/ghost &&  ghost config"

@@ -15,10 +15,20 @@ all:
 
 
   # APP variables
-  ghost_ip: 34.123.108.44
+  ghost_ip: 34.133.132.84
   ghost_port: 2368        
 
 
   # Additional variables
   app: ghost
   app_image: ghost:latest
+
+  # Deployments Names
+  deployment_ghost_name: ghost-deployment
+  deployment_db_name: mysql-deployment
+
+  # NameSpace
+  mynamespace: ascn-cluster 
+
+  #PVC
+  pvcname: mysql-pv-claim
