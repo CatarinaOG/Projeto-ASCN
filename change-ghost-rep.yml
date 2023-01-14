@@ -1,0 +1,7 @@
+- name: deploy ghost app
+  hosts: localhost
+  environment:
+    GOOGLE_CREDENTIALS: "{{ gcp_cred_file }}"
+  roles:
+    - role: change_ghost_rep
+

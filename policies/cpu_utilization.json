@@ -1,0 +1,33 @@
+{
+    "displayName": "Exceeded CPU Utilisation",
+    "userLabels": {},
+    "conditions": [
+      {
+        "displayName": "Kubernetes Container - CPU limit utilisation",
+        "conditionThreshold": {
+          "filter": "resource.type = \"k8s_container\" AND metric.type = \"kubernetes.io/container/cpu/limit_utilization\"",
+          "aggregations": [
+            {
+              "alignmentPeriod": "300s",
+              "crossSeriesReducer": "REDUCE_NONE",
+              "perSeriesAligner": "ALIGN_MEAN"
+            }
+          ],
+          "comparison": "COMPARISON_GT",
+          "duration": "0s",
+          "trigger": {
+            "count": 1
+          },
+          "thresholdValue": 80
+        }
+      }
+    ],
+    "alertStrategy": {
+      "autoClose": "604800s"
+    },
+    "combiner": "OR",
+    "enabled": true,
+    "notificationChannels": [
+      "projects/ascn-367014/notificationChannels/2055552676721756742"
+    ]
+}

@@ -26,7 +26,7 @@
     
 
 - name: run kubectl to retreive external IP - Wait for task to complete
-  shell: "kubectl get -n ascn-cluster service ghost-service -o wide | awk '{ print $4}' |  grep -v EXT"
+  shell: "kubectl get -n {{ mynamespace }} service ghost-service -o wide | awk '{ print $4}' |  grep -v EXT"
   register: k_ext_ip
   until: k_ext_ip.stdout != ""
   retries: 2
@@ -34,32 +34,24 @@
 
 - name: Updating Inventory
   lineinfile: 
-    dest: /Users/brunofilipemirandapereira/Documents/Universidade/Mestrado/1ANO/1-semestre/ASCN/TP/Projeto-ASCN/inventory/gcp.yml
+    dest: inventory/gcp.yml
     regexp: 'ghost_ip:.*$'
     line: '  ghost_ip: {{ k_ext_ip.stdout }}'
     state: present
     backrefs: yes
 
 - name: get mysql pod name
-  shell: 'kubectl get pod -n ascn-cluster -l app=mysql -o jsonpath="{.items[0].metadata.name}"'
+  shell: 'kubectl get pod -n {{ mynamespace }} -l app=mysql -o jsonpath="{.items[0].metadata.name}"'
   register: mysql_pod_name
 
 - name: get ghost pod name
-  shell: 'kubectl get pod -n ascn-cluster -l app=ghost -o jsonpath="{.items[0].metadata.name}"'
+  shell: 'kubectl get pod -n {{ mynamespace }} -l app=ghost -o jsonpath="{.items[0].metadata.name}"'
   register: ghost_pod_name
 
 
 - name: Create Admin
-  command: kubectl exec "{{ mysql_pod_name.stdout_lines[0] }}" -n "{{ mynamespace }}" -- mysql -u ghostuser -ppass -e "update ghost.users set name='admin', password='\$2b\$10\$77l2HBPz7F9loLKiz/CynuIdjNpIq2jb9uioIw8/O4Sa7ZBhQTM2S', email='jpdelgado2001@gmail.com', status='active' where id=1;"  
+  command: kubectl exec "{{ mysql_pod_name.stdout_lines[0] }}" -n "{{ mynamespace }}" -- mysql -u "{{ ghost_user }}" -p"{{ ghost_pass }}" -e "update ghost.users set name='{{ admin_name }}', password='{{ admin_pass }}', email='{{ admin_email }}', status='active' where id=1;"  
   register: result
   until: result is succeeded
   retries: 3
   delay: 40
-
-
-#- name: Config Email service
-#  command: kubectl cp /Users/brunofilipemirandapereira/Documents/Universidade/Mestrado/1ANO/1-semestre/ASCN/TP/Projeto-ASCN/inventory/config.production.json ascn-cluster/{{ ghost_pod_name.stdout_lines[0] }}:/var/lib/ghost/config.production.json
-#
-
-#- name: restart ghost 
-#  command: kubectl exec {{ ghost_pod_name.stdout_lines[0] }} -n {{ mynamespace }} -- bash -c "cd /var/lib/ghost &&  ghost config"

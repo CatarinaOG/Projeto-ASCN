@@ -15,18 +15,49 @@
 
 - name: Login to the portal
   uri:
-    url: "http://{{ ghost_ip }}:{{ ghost_port }}/ghost"
+    url: "http://{{ ghost_ip }}:{{ ghost_port }}/ghost/api/admin/session/"
     method: POST
-    body: "username=jpdelgado2001@gmail.com&password=123456"
-    status_code: 200
+    body_format: json
+    body: '{"username": "jpdelgado2001@gmail.com", "password": "123456"}'
+    return_content: yes
+    status_code: 201
     follow_redirects: true
   register: login
 
-- name: Get cookie
-  ansible.builtin.uri:
-    url: "http://{{ ghost_ip }}:{{ ghost_port }}/ghost/api/admin/session/"
-    method: GET
-  register: result
-  until: result.status == 200
-  retries: 1
-  delay: 3
+
+- name: Criar post
+  uri:
+    url: "http://{{ ghost_ip }}:{{ ghost_port }}/ghost/api/admin/posts/"
+    method: POST
+    body_format: json
+    body: '{"posts": [{
+            "title": "My test post",
+            "html": "<p>Post de teste!</p>",
+            "status": "published"}
+            ]}'
+    status_code: 201
+    follow_redirects: true
+    headers:
+      Cookie: "{{ login.cookies_string }}"
+  register: login
+
+
+#- name: Verificar post
+#  uri:
+#    url: "http://{{ ghost_ip }}:{{ ghost_port }}/ghost/api/content/posts/"
+#    method: GET
+#    status_code: 200
+#    headers:
+#      Cookie: "{{ login.cookies_string }}"
+#  register: login
+#  return_content: yes
+#  failed_when: "'My test post' not in login.title"
+
+#- name: Get cookie
+#  ansible.builtin.uri:
+#    url: "http://{{ ghost_ip }}:{{ ghost_port }}/ghost/api/admin/session/"
+#    method: GET
+#  register: result
+#  until: result.status == 200
+#  retries: 1
+#  delay: 3

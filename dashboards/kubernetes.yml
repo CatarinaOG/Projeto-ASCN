@@ -1,8 +1,8 @@
-displayName: Trabalho Kubernetes ASCN
+displayName: Dashboard Trabalho ASCN
 gridLayout:
   columns: '2'
   widgets:
-  - title: Média de utilização do PV pelo Ghost
+  - title: Utilização do PV pelo Ghost
     xyChart:
       chartOptions:
         mode: COLOR
@@ -21,7 +21,7 @@ gridLayout:
       yAxis:
         label: y1Axis
         scale: LINEAR
-  - title: Média de utilização do PV pela BD
+  - title: Utilização do PV pela BD
     xyChart:
       chartOptions:
         mode: COLOR
@@ -40,7 +40,7 @@ gridLayout:
       yAxis:
         label: y1Axis
         scale: LINEAR
-  - title: Média de Bytes recebidos pela pod do Ghost
+  - title: Bytes recebidos pela pod do Ghost
     xyChart:
       chartOptions:
         mode: COLOR
@@ -62,7 +62,7 @@ gridLayout:
       yAxis:
         label: y1Axis
         scale: LINEAR
-  - title: Média de Bytes recebidos pela pod do MySQL
+  - title: Bytes recebidos pela pod do MySQL
     xyChart:
       chartOptions:
         mode: COLOR
@@ -134,7 +134,7 @@ gridLayout:
           timeSeriesFilter:
             aggregation:
               alignmentPeriod: 60s
-              perSeriesAligner: ALIGN_RATE
+              perSeriesAligner: ALIGN_DELTA
             filter: metric.type="kubernetes.io/container/cpu/core_usage_time" resource.type="k8s_container"
               metadata.user_labels."app"="mysql"
             secondaryAggregation:
@@ -156,7 +156,7 @@ gridLayout:
           timeSeriesFilter:
             aggregation:
               alignmentPeriod: 60s
-              perSeriesAligner: ALIGN_RATE
+              perSeriesAligner: ALIGN_DELTA
             filter: metric.type="kubernetes.io/container/cpu/core_usage_time" resource.type="k8s_container"
               metadata.user_labels."app"="ghost"
             secondaryAggregation:
@@ -166,7 +166,7 @@ gridLayout:
       yAxis:
         label: y1Axis
         scale: LINEAR
-  - title: Bytes transmitidos para o Pod MySQL
+  - title: Bytes transmitidos pelo Pod MySQL
     xyChart:
       chartOptions:
         mode: COLOR
@@ -188,7 +188,7 @@ gridLayout:
       yAxis:
         label: y1Axis
         scale: LINEAR
-  - title: Bytes transmitidos para o Pod Ghost
+  - title: Bytes transmitidos pelo Pod Ghost
     xyChart:
       chartOptions:
         mode: COLOR
@@ -200,7 +200,7 @@ gridLayout:
           timeSeriesFilter:
             aggregation:
               alignmentPeriod: 60s
-              perSeriesAligner: ALIGN_RATE
+              perSeriesAligner: ALIGN_DELTA
             filter: metric.type="kubernetes.io/pod/network/sent_bytes_count" resource.type="k8s_pod"
               metadata.user_labels."app"="ghost"
             secondaryAggregation:
@@ -210,3 +210,26 @@ gridLayout:
       yAxis:
         label: y1Axis
         scale: LINEAR
+  - title: Load Balancer - RTT latencies
+    xyChart:
+      chartOptions:
+        mode: COLOR
+      dataSets:
+      - minAlignmentPeriod: 60s
+        plotType: LINE
+        targetAxis: Y1
+        timeSeriesQuery:
+          timeSeriesFilter:
+            aggregation:
+              alignmentPeriod: 60s
+              perSeriesAligner: ALIGN_PERCENTILE_50
+            filter: metric.type="loadbalancing.googleapis.com/l3/external/rtt_latencies"
+              resource.type="loadbalancing.googleapis.com/ExternalNetworkLoadBalancerRule"
+            secondaryAggregation:
+              alignmentPeriod: 60s
+      timeshiftDuration: 0s
+      yAxis:
+        label: y1Axis
+        scale: LINEAR
+  - alertChart:
+      name: projects/ascn-367014/alertPolicies/696170588528982912

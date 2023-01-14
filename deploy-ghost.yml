@@ -9,5 +9,6 @@
     - deploy_ghost_db
     - deploy_ghost_app
     - monitoring_dashboards
+    - monitoring_policies
 
 

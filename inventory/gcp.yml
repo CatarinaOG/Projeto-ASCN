@@ -34,4 +34,11 @@ all:
   mysql_pvcname: mysql-pv-claim
   ghost_pvcname: ghost-pv-claim
 
- 
+  #Admin
+  admin_pass: \$2b\$10\$77l2HBPz7F9loLKiz/CynuIdjNpIq2jb9uioIw8/O4Sa7ZBhQTM2S
+  admin_email: jpdelgado2001@gmail.com
+  admin_name: admin
+
+#utilizador ghost da base de dados
+  ghost_user: ghostuser
+  ghost_pass: pass

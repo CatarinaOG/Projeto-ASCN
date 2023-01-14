@@ -1,0 +1,3 @@
+
+- name: Change number of replicas for ghost deployment
+  shell: "kubectl scale deployment {{ deployment_ghost_name }} --replicas={{ replicas | int }} -n {{ mynamespace }}"
