@@ -40,24 +40,3 @@
     headers:
       Cookie: "{{ login.cookies_string }}"
   register: login
-
-
-#- name: Verificar post
-#  uri:
-#    url: "http://{{ ghost_ip }}:{{ ghost_port }}/ghost/api/content/posts/"
-#    method: GET
-#    status_code: 200
-#    headers:
-#      Cookie: "{{ login.cookies_string }}"
-#  register: login
-#  return_content: yes
-#  failed_when: "'My test post' not in login.title"
-
-#- name: Get cookie
-#  ansible.builtin.uri:
-#    url: "http://{{ ghost_ip }}:{{ ghost_port }}/ghost/api/admin/session/"
-#    method: GET
-#  register: result
-#  until: result.status == 200
-#  retries: 1
-#  delay: 3
